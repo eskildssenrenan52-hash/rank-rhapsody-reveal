@@ -5,6 +5,7 @@ import { teamAverageLevel } from "@/game/modes";
 import {
   claimRankReward,
   applyRankedMatch,
+  claimRankedMission,
   spendItem,
   startNewSeason,
   teamSaves,
@@ -14,6 +15,7 @@ import {
   isPlacing,
   leaderboard,
   matchmake,
+  missionList,
   PLACEMENT_MATCHES,
   PROMO_LOSSES,
   PROMO_WINS,
@@ -28,7 +30,10 @@ import { BattleScreen } from "@/screens/battle";
 import { TopBar } from "@/screens/roster";
 
 type View = "hub" | "brief" | "fight" | "result";
-type Tab = "ladder" | "rewards" | "history";
+type Tab = "ladder" | "missions" | "rewards" | "history";
+
+/** limite de trocas de oponente por sessão. */
+const REROLL_LIMIT = 3;
 
 export function RankedScreen({ onBack }: { onBack: () => void }) {
   const g = useGame();
@@ -36,16 +41,25 @@ export function RankedScreen({ onBack }: { onBack: () => void }) {
   const [tab, setTab] = useState<Tab>("ladder");
   const [opp, setOpp] = useState<RankedOpponent | null>(null);
   const [outcome, setOutcome] = useState<RankedOutcome | null>(null);
+  const [rerolls, setRerolls] = useState(0);
 
   const team = teamSaves(g);
   const r = g.ranked;
   const rank = rankAt(r.rankIndex);
   const placing = isPlacing(r);
   const stats = statsOf(r);
+  const missions = missionList(r);
+  const missionsReady = missions.filter((m) => m.claimable).length;
 
   function queue() {
     setOpp(matchmake(r, teamAverageLevel(team)));
     setView("brief");
+  }
+
+  function reroll() {
+    if (rerolls >= REROLL_LIMIT) return;
+    setRerolls((n) => n + 1);
+    setOpp(matchmake(r, teamAverageLevel(team)));
   }
 
   function finishFight(result: "win" | "lose", snapshot?: Record<string, { hp: number; mp: number }>) {
