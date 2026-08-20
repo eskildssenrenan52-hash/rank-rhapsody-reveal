@@ -444,8 +444,8 @@ export function RankedScreen({ onBack }: { onBack: () => void }) {
         )}
 
         {/* ABAS */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 4, marginTop: 8 }}>
-          {(["ladder", "rewards", "history"] as Tab[]).map((t) => (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 4, marginTop: 8 }}>
+          {(["ladder", "missions", "rewards", "history"] as Tab[]).map((t) => (
             <button
               key={t}
               type="button"
@@ -453,10 +453,52 @@ export function RankedScreen({ onBack }: { onBack: () => void }) {
               onClick={() => setTab(t)}
               style={{ fontSize: 6, padding: 0, borderColor: tab === t ? "var(--mk-accent2)" : undefined }}
             >
-              {t === "ladder" ? "RANKING" : t === "rewards" ? "RECOMPENSAS" : "HISTORICO"}
+              {t === "ladder"
+                ? "RANKING"
+                : t === "missions"
+                  ? `MISSOES${missionsReady > 0 ? ` (${missionsReady})` : ""}`
+                  : t === "rewards"
+                    ? "PREMIOS"
+                    : "HISTORICO"}
             </button>
           ))}
         </div>
+
+        {tab === "missions" && (
+          <div style={{ display: "grid", gap: 4, marginTop: 6 }}>
+            {missions.map((m) => (
+              <div
+                key={m.id}
+                style={{
+                  padding: 5,
+                  border: `2px solid ${m.claimable ? "var(--mk-accent)" : "rgba(53,226,240,0.22)"}`,
+                  background: m.claimed ? "rgba(8,18,32,0.45)" : "rgba(8,18,32,0.8)",
+                  opacity: m.claimed ? 0.6 : 1,
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span className="mk-title" style={{ fontSize: 7, flex: 1 }}>
+                    {m.name}
+                  </span>
+                  <span className="mk-title" style={{ fontSize: 7, color: "var(--mk-accent2)" }}>
+                    <Icon name="coins" size={10} /> {m.gold}
+                  </span>
+                </div>
+                <div style={{ fontSize: 10, color: "var(--mk-muted)", margin: "2px 0 4px" }}>{m.desc}</div>
+                <MissionBar progress={m.progress} goal={m.goal} done={m.done} />
+                <button
+                  type="button"
+                  className="mk-btn mk-btn-sq"
+                  disabled={!m.claimable}
+                  onClick={() => claimRankedMission(m.id)}
+                  style={{ fontSize: 6, padding: 2, width: "100%", marginTop: 4 }}
+                >
+                  {m.claimed ? "COLETADO" : m.claimable ? "COLETAR" : "EM PROGRESSO"}
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
         {tab === "ladder" && (
           <div style={{ display: "grid", gap: 3, marginTop: 6 }}>
