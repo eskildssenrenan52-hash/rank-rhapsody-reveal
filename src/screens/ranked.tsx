@@ -130,7 +130,8 @@ export function RankedScreen({ onBack }: { onBack: () => void }) {
               backgroundSize: "cover",
               backgroundPosition: "center",
               imageRendering: "pixelated",
-              border: `2px solid ${opp.archetype.color}`,
+              border: `2px solid ${opp.rival ? "#ff3b6b" : opp.archetype.color}`,
+              boxShadow: opp.rival ? "0 0 0 2px rgba(255,59,107,0.35)" : undefined,
               padding: 8,
               marginBottom: 8,
               display: "flex",
@@ -139,13 +140,18 @@ export function RankedScreen({ onBack }: { onBack: () => void }) {
             }}
           >
             <img
-              src={opp.rank.tier.emblem}
+              src={opp.rival ? faceUrl(opp.robot) : opp.rank.tier.emblem}
               alt=""
               width={54}
               height={54}
               style={{ imageRendering: "pixelated" }}
             />
             <div>
+              {opp.rival && (
+                <div className="mk-title" style={{ fontSize: 7, color: "#ff3b6b" }}>
+                  ⚔ NEMESIS · REVANCHE
+                </div>
+              )}
               <div className="mk-title" style={{ fontSize: 10, textShadow: "2px 2px 0 #000" }}>
                 {opp.pilot}
               </div>
@@ -157,6 +163,17 @@ export function RankedScreen({ onBack }: { onBack: () => void }) {
               </div>
             </div>
           </div>
+
+          {opp.rival && r.rival && (
+            <Panel style={{ marginBottom: 8, borderColor: "#ff3b6b" }}>
+              <div className="mk-title" style={{ fontSize: 7, color: "#ff3b6b" }}>
+                ELE JA TE VENCEU {r.rival.wins}x
+              </div>
+              <div style={{ fontSize: 10, color: "var(--mk-muted)" }}>
+                Nemesis vem mais forte a cada vitoria. Derrotalo rende ouro extra e PR bonus.
+              </div>
+            </Panel>
+          )}
 
           <Panel style={{ marginBottom: 8 }}>
             <div className="mk-title" style={{ fontSize: 8, color: opp.archetype.color }}>
