@@ -816,6 +816,7 @@ function ResultView({
                 <Line label="DIFERENCA DE RANK" value={b.spread} />
                 <Line label="SEQUENCIA" value={b.streak} />
                 <Line label="DESEMPENHO" value={b.performance} />
+                <Line label="NEMESIS" value={b.rival} />
               </div>
             </>
           )}
