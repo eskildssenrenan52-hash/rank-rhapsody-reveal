@@ -679,6 +679,44 @@ function PrBar({ pr, max }: { pr: number; max: number }) {
   );
 }
 
+function MissionBar({ progress, goal, done }: { progress: number; goal: number; done: boolean }) {
+  const pct = Math.max(0, Math.min(1, goal > 0 ? progress / goal : 0));
+  return (
+    <div
+      style={{
+        position: "relative",
+        height: 12,
+        border: "2px solid rgba(53,226,240,0.45)",
+        background: "rgba(6,14,26,0.9)",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: `${pct * 100}%`,
+          background: done ? "linear-gradient(90deg,#57d76a,#ffc43a)" : "linear-gradient(90deg,#35e2f0,#7ad3ff)",
+          transition: "width 400ms steps(10)",
+        }}
+      />
+      <span
+        className="mk-title"
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "grid",
+          placeItems: "center",
+          fontSize: 6,
+          textShadow: "1px 1px 0 #000",
+        }}
+      >
+        {progress} / {goal}
+      </span>
+    </div>
+  );
+}
+
 function ResultView({
   outcome,
   onDone,
