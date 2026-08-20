@@ -243,7 +243,20 @@ export function RankedScreen({ onBack }: { onBack: () => void }) {
               ESCALE PELO MENOS UM ROBO
             </div>
           ) : (
-            <PixelButton onClick={() => setView("fight")}>ENTRAR NA ARENA</PixelButton>
+            <div style={{ display: "grid", gap: 6 }}>
+              <PixelButton onClick={() => setView("fight")}>ENTRAR NA ARENA</PixelButton>
+              <button
+                type="button"
+                className="mk-btn mk-btn-sq"
+                disabled={rerolls >= REROLL_LIMIT}
+                onClick={reroll}
+                style={{ fontSize: 7, padding: 4, width: "100%" }}
+              >
+                {rerolls >= REROLL_LIMIT
+                  ? "SEM TROCAS NESTA SESSAO"
+                  : `TROCAR OPONENTE (${REROLL_LIMIT - rerolls})`}
+              </button>
+            </div>
           )}
           <div style={{ height: 40 }} />
         </div>
