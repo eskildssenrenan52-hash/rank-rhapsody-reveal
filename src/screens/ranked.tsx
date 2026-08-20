@@ -359,6 +359,40 @@ export function RankedScreen({ onBack }: { onBack: () => void }) {
           </PixelButton>
         </div>
 
+        {/* NEMESIS */}
+        {r.rival && (
+          <Panel style={{ marginTop: 8, borderColor: "#ff3b6b" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <img
+                src={faceUrl(r.rival.robot)}
+                alt=""
+                width={40}
+                height={40}
+                style={{ imageRendering: "pixelated", filter: "drop-shadow(0 0 4px #ff3b6b)" }}
+              />
+              <div style={{ flex: 1 }}>
+                <div className="mk-title" style={{ fontSize: 7, color: "#ff3b6b" }}>
+                  NEMESIS ATIVO
+                </div>
+                <div className="mk-title" style={{ fontSize: 9 }}>
+                  {r.rival.pilot}
+                </div>
+                <div className="mk-title" style={{ fontSize: 6, color: "var(--mk-muted)" }}>
+                  {rankAt(r.rival.rankIndex).name} · VENCEU VOCE {r.rival.wins}x
+                </div>
+              </div>
+              <span className="mk-title" style={{ fontSize: 6, color: "var(--mk-muted)", textAlign: "right" }}>
+                DERROTADOS
+                <br />
+                <span style={{ color: "#57d76a", fontSize: 9 }}>{r.nemesisBeaten}</span>
+              </span>
+            </div>
+            <div style={{ fontSize: 10, color: "var(--mk-muted)", marginTop: 4 }}>
+              Ele pode reaparecer na fila a qualquer momento. Vence-lo remove o nemesis e paga ouro extra.
+            </div>
+          </Panel>
+        )}
+
         {/* ESTATISTICAS */}
         <div
           className="mk-title"
